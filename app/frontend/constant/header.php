@@ -36,7 +36,7 @@
           <li><a href="#">Reservations</a></li>
           <li><a href="frontend/users/indexUsers.php">Users</a></li>
           <li><a href="#">My reservations</a></li>
-          <li><a href="#">Profile</a></li>
+          <li><a href="frontend/authentification/registration.php">Registration</a></li>
         </ul>
       </div>
     </nav>

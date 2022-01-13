@@ -2,10 +2,6 @@
 
 $PageTitle = "Gestion des utilisateurs";
 
-function customPageHeader()
-{ ?>
-<?php }
-
 include_once('../../frontend/constant/header.php');
 include_once("../../controllers/usersController.php");
 
@@ -19,7 +15,6 @@ include_once("../../controllers/usersController.php");
                 <th scope="col">Identifiant</th>
                 <th scope="col">Nom</th>
                 <th scope="col">Prénom</th>
-                <th scope="col">Age</th>
                 <th scope="col">Email</th>
                 <th scope="col">Action</th>
             </tr>
@@ -81,12 +76,6 @@ include_once("../../controllers/usersController.php");
                         <label for="firstName" class="col-sm-2 col-form-label">Prénom </label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="firstName" name="firstName" required>
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="age" class="col-sm-2 col-form-label">Age </label>
-                        <div class="col-sm-10">
-                            <input type="number" class="form-control" id="age" name="age" required>
                         </div>
                     </div>
                     <div class="mb-3 row">

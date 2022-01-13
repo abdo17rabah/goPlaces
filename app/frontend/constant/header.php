@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../../style.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <title><?= isset($PageTitle) ? $PageTitle : "Go Places"?></title>
+  <?php if (function_exists('customPageHeader')){
+    customPageHeader();
+  }?>
+</head>
+<body>
+  <div class="scrollToTop"><i class="fas fa-chevron-up"></i></div>
+  <div class="container">
+    <nav>
+      <div class="nav-container">
+        <div class="brand">Go Places</div>
+        <div class="responsive-toggle">
+          <i class="fas fa-bars"></i>
+        </div>
+      </div>
+      <div class="links">
+        <ul>
+          <li><a href="#">Trips</a></li>
+          <li><a href="#">Reservations</a></li>
+          <li><a href="#">Users</a></li>
+          <li><a href="#">My reservations</a></li>
+          <li><a href="#">Profile</a></li>
+        </ul>
+      </div>
+    </nav>

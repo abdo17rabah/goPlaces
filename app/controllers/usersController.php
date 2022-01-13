@@ -1,31 +1,7 @@
 <?php
-    //require_once('../classes/User.php');
-
-    // var_dump('../database\Database.php');
-    // die;
-
-    require_once('../database/Database.php');
-    // $db = new Database('localhost', 'goPlaces', 'ipssi', 'ipssi');
-    // $connexionDb = $db->getConnection();
-    var_dump($ok);
-    die;
-    // include('../classes/Database.php');
-
-    // function connectToDb() {
-    //     //connection BDD paramètre : Host, port, dbname, identifiant, mdp
-    //     $dbHost="localhost";
-    //     $port=3306;
-    //     $dbname="ipssi_php_db";
-    //     $iden="root";
-    //     $mdp="";
-    //     try {
-    //         $connexionDb = new PDO('mysql:host='.$dbHost.';port='.$port.';dbname='.$dbname,$iden,$mdp);
-    //         return $connexionDb;
-    //     } catch (PDOException $excep) {
-    //         return $excep;
-    //     }
-    // }
-
+    
+    include(__DIR__ .'/../database/Database.php');
+    
     function getAllUsers() {
         // $connexionDb = connectToDb();
         $db = new Database('localhost', 'goPlaces', 'ipssi', 'ipssi');
@@ -86,15 +62,17 @@
         echo $idUser;
     }
 
-    switch($_GET['action']){
-        case "addUser":
-            addUser();
-            break;
-        case "deletUserById":
-            deleteUserById($_GET['id']);
-            break;
-        case "updateUser":
-            updateUserById($_GET['id']);
-            break;
+    if(isset($_GET['action'])){
+        switch($_GET['action']){
+            case "addUser":
+                addUser();
+                break;
+            case "deletUserById":
+                deleteUserById($_GET['id']);
+                break;
+            case "updateUser":
+                updateUserById($_GET['id']);
+                break;
+        }
     }
 ?>

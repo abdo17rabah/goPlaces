@@ -36,7 +36,15 @@
           <li><a href="#">Reservations</a></li>
           <li><a href="frontend/users/indexUsers.php">Users</a></li>
           <li><a href="#">My reservations</a></li>
-          <li><a href="frontend/authentification/registration.php">Registration</a></li>
+          <?php 
+            
+            if(isset($_GET['sess'])){
+              echo '<li><a href="frontend/users/account.php?sess='.$_GET['sess'].'">My profile</a></li>';
+              echo '<li><a href="controllers/authentificationController.php?action=logout&sess='.$_GET['sess'].'">Logout</a></li>';
+            } else {
+              echo '<li><a href="frontend/authentification/login.php">Login</a></li>';
+            }
+          ?>
         </ul>
       </div>
     </nav>

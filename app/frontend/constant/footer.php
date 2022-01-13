@@ -11,6 +11,6 @@
 </footer>
 </div>
 <script src="https://unpkg.com/scrollreveal"></script>
-<script src="script.js"></script>
+<script src="../../script.js"></script>
 </body>
 </html>

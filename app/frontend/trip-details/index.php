@@ -83,7 +83,7 @@ $cities = array_column(getAllCitiesNames(), 'name');
           <i class="fas fa-shopping-basket"></i>
         </div>
         <!--      @todo add condition to check if user is admin-->
-        <div class="icon" onclick="switchVisible();">
+        <div class="icon" onclick="switchVisible('trip-details', 'updateFormDiv');">
           <i class="fas fa-edit"></i>
         </div>
         <!--      @todo add condition to check if user is admin-->

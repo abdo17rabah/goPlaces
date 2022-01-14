@@ -115,6 +115,7 @@ nav .nav-container .brand {
   color: #1b2f5a;
   font-size: 3rem;
   font-family: "Zen Tokyo Zoo", cursive;
+  cursor: pointer;
 }
 
 nav .nav-container .responsive-toggle {
@@ -273,6 +274,37 @@ nav .links ul li a {
   margin: 0.3rem 0 1rem 0;
 }
 
+.next-trip .trip .subTitle {
+  margin: 0 0.5rem;
+  color: #4e4e4e;
+}
+
+.next-trip .trip .icons {
+  margin: 1rem 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.next-trip .trip .icons .icon {
+  margin: 0 0 0 0.5rem;
+  background-color: #e0e0e0;
+  height: 2.5rem;
+  width: 2.5rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 3rem;
+}
+
 .next-trip .content .steps .step {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -347,6 +379,11 @@ nav .links ul li a {
           justify-content: space-between;
   margin: 0.5rem 1rem;
   color: #4e4e4e;
+}
+
+.rounded-lg {
+  margin: 1rem;
+  border-radius: 1rem;
 }
 
 footer {

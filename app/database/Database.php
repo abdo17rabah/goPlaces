@@ -1,7 +1,5 @@
 <?php
 
-// $ok = 'ok';
-
 class Database {
 
     private $connection;

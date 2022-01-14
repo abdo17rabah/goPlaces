@@ -1,10 +1,10 @@
 <?php
-    
+
     include(__DIR__ .'/../database/Database.php');
-    
+    require_once (__DIR__ .'/../../environment.php');
+
     function getAllUsers() {
-        // $connexionDb = connectToDb();
-        $db = new Database('localhost', 'goPlaces', 'ipssi', 'ipssi');
+        $db = new Database($_ENV["SERVER"], $_ENV["DB"], $_ENV["USER"], $_ENV["PASSWORD"]);
         $connexionDb = $db->getConnection();
         $requete="SELECT * FROM user";
         $result = $connexionDb->query($requete);
@@ -15,7 +15,6 @@
     function addUser() {
         $lastName = $_POST['lastName'];
         $firstName = $_POST['firstName'];
-        $age = $_POST['age'];
         $email = $_POST['email'];
 
         $db = new Database('localhost', 'goPlaces', 'ipssi', 'ipssi');
@@ -46,10 +45,10 @@
     function deleteUserById($idUser) {
         $db = new Database('localhost', 'goPlaces', 'ipssi', 'ipssi');
         $connexionDb = $db->getConnection();
-        
+
         $requete = $connexionDb->prepare("DELETE FROM user WHERE id = :id");
         $requete->bindParam(':id', $idUser);
-        
+
         if ($requete->execute()){
             header('location:../frontend/users/indexUsers.php');
         }else {

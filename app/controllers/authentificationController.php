@@ -19,7 +19,7 @@ function redirect(String $action = null, String $session = null){
         case 'logout':
             logout($session);
         default:
-            header('Location: http://localhost/coursphp/goPlaces/app/');
+            header('Location: ../');
             exit();
             break;
     }
@@ -36,14 +36,14 @@ function login(){
 
             $_SESSION['sess_'.$user->getEmail()] = serialize($user);
             
-            header('Location: http://localhost/coursphp/goPlaces/app/index.php?sess=sess_'.$user->getEmail());
+            header('Location: ../index.php?sess=sess_'.$user->getEmail());
             exit();
         } else {
-            header('Location: http://localhost/coursphp/goPlaces/app/frontend/authentification/login.php?msg_error="Password wrong"');
+            header('Location: ../frontend/authentification/login.php?msg_error="Password wrong"');
             exit();
         }
     } else {
-        header('Location: http://localhost/coursphp/goPlaces/app/frontend/authentification/login.php?msg_error="User not found"');
+        header('Location: ../frontend/authentification/login.php?msg_error="User not found"');
         exit();
     }
 

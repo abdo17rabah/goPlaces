@@ -1,11 +1,11 @@
 <?php
 error_reporting(E_ERROR | E_PARSE);
 
-$PageTitle="Our trips";
+$PageTitle = "Our trips";
 
 include_once('../../frontend/constant/header.php');
-require_once(__DIR__ .'/../../controllers/tripController.php');
-require_once(__DIR__ .'/../../controllers/cityController.php');
+require_once(__DIR__ . '/../../controllers/tripController.php');
+require_once(__DIR__ . '/../../controllers/cityController.php');
 
 $trips = getAllTrips();
 $cities = array_column(getAllCitiesNames(), 'name');
@@ -18,9 +18,9 @@ $cities = array_column(getAllCitiesNames(), 'name');
     if ($trips) {
       foreach ($trips as $trip) {
         $cityNames = array_column(getTripCitiesNames($trip["id"]), 'name');
-        ?>
+    ?>
         <div class="cards">
-          <div class="card" style="cursor: pointer;" onclick="window.location='/frontend/trip-details/index.php?id='+<?= $trip['id']; ?>;">
+          <div class="card" style="cursor: pointer;" onclick="window.location='../trip-details/index.php?id='+<?= $trip['id']; ?>;">
             <div class="image">
               <img src="../../assets/destination1.png" alt="" />
             </div>
@@ -42,16 +42,22 @@ $cities = array_column(getAllCitiesNames(), 'name');
             </div>
           </div>
         </div>
-        <?php
+      <?php
       }
     } else {
       ?>
       <p class="subtitle">No Trips are available for the moment</p>
-      <?php
+    <?php
     }
     ?>
   </section>
-  <button name="addButton" type="button" class="btn btn-primary btn-block rounded-pill shadow-sm my-3" onclick="switchVisible('div1', 'addFormDiv');"> Add new trip </button>
+  <?php
+  if ($session && $session->getRole() == 'ADMIN') {
+  ?>
+    <button name="addButton" type="button" class="btn btn-primary btn-block rounded-pill shadow-sm my-3" onclick="switchVisible('div1', 'addFormDiv');"> Add new trip </button>
+  <?php
+  }
+  ?>
 </div>
 
 <div class="container py-5" id="addFormDiv" style="display: none;">
@@ -60,28 +66,28 @@ $cities = array_column(getAllCitiesNames(), 'name');
       <div class="tab-content">
         <div id="nav-tab-card" class="tab-pane fade show active">
           <?php
-          if(isset($_GET['message'])){
-            ?>
-            <p class="alert alert-success"><?=$_GET['message']?></p>
-            <?php
+          if (isset($_GET['message'])) {
+          ?>
+            <p class="alert alert-success"><?= $_GET['message'] ?></p>
+          <?php
           }
           ?>
           <form role="form" method="post" action="../../controllers/tripController.php?action=create">
             <input type="hidden" id="id" name="id">
             <div class="form-group">
               <label for="name">Trip's name</label>
-              <input type="text" name="name" placeholder="Name"  required class="form-control">
-              <?php echo "<p class='text-danger'>$errName</p>";?>
+              <input type="text" name="name" placeholder="Name" required class="form-control">
+              <?php echo "<p class='text-danger'>$errName</p>"; ?>
             </div>
             <div class="form-group">
               <label for="date">Trip's date</label>
-              <input type="datetime-local" name="date" min="<?php echo Date('Y-m-d\TH:i',time()) ?>" placeholder="Date" required class="form-control">
-              <?php echo "<p class='text-danger'>$errDate</p>";?>
+              <input type="datetime-local" name="date" min="<?php echo Date('Y-m-d\TH:i', time()) ?>" placeholder="Date" required class="form-control">
+              <?php echo "<p class='text-danger'>$errDate</p>"; ?>
             </div>
             <div class="form-group">
               <label for="cities">Visited cities:</label>
               <select name="cities" id="allCities" class="selectpicker" multiple data-live-search="true">
-                <?php foreach($cities as $city){ ?>
+                <?php foreach ($cities as $city) { ?>
                   <option value="<?php echo $city; ?>"><?php echo strtoupper($city); ?></option>
                 <?php } ?>
               </select>
@@ -89,12 +95,12 @@ $cities = array_column(getAllCitiesNames(), 'name');
             <div class="form-group">
               <label for="price">Trip's price</label>
               <input type="text" name="price" placeholder="price" required class="form-control">
-              <?php echo "<p class='text-danger'>$errPrice</p>";?>
+              <?php echo "<p class='text-danger'>$errPrice</p>"; ?>
             </div>
             <div class="form-group">
               <label for="availablePlaces">Trip's available places</label>
               <input type="text" name="availablePlaces" placeholder="Available places" required class="form-control">
-              <?php echo "<p class='text-danger'>$errPlaces</p>";?>
+              <?php echo "<p class='text-danger'>$errPlaces</p>"; ?>
             </div>
             <input type="hidden" name="hidden_cities" id="hidden_cities2" />
             <button name="submit" type="submit" class="btn btn-primary btn-block rounded-pill shadow-sm my-3"> Add </button>
@@ -106,7 +112,7 @@ $cities = array_column(getAllCitiesNames(), 'name');
 </div>
 
 <script>
-  $('#allCities').change(function(){
+  $('#allCities').change(function() {
     $('#hidden_cities2').val($('#allCities').val());
   });
 </script>

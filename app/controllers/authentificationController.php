@@ -1,14 +1,15 @@
 <?php
 
-include_once(__DIR__.'/../controllers/usersController.php');
+include_once(__DIR__ . '/../controllers/usersController.php');
 
-if(isset($_GET['action'])){
+if (isset($_GET['action'])) {
     redirect($_GET['action'], $_GET['sess']);
 } else {
     redirect();
 }
 
-function redirect(String $action = null, String $session = null){
+function redirect(String $action = null, String $session = null)
+{
     switch ($action) {
         case 'registration':
             registration();
@@ -25,43 +26,54 @@ function redirect(String $action = null, String $session = null){
     }
 }
 
-function login(){
+function login()
+{
     $email = htmlspecialchars($_POST['email']);
     $password = htmlspecialchars($_POST['password']);
 
     $user = findUserByEmail($email);
-    if($user){
-        if($user->getPassWord() == $password){
+    var_dump($user);
+
+    if ($user) {
+        if ($user->getPassWord() == $password) {
             session_start();
 
-            $_SESSION['sess_'.$user->getEmail()] = serialize($user);
-            
-            header('Location: http://localhost/coursphp/goPlaces/app/index.php?sess=sess_'.$user->getEmail());
+            // var_dump($_SESSION);
+            $_SESSION['sess_' . $user->getEmail()] = serialize($user);
+            // var_dump($user);
+
+            header('Location: ./../frontend/trips/index.php?sess=sess_'.$user->getEmail().'');
             exit();
         } else {
-            header('Location: http://localhost/coursphp/goPlaces/app/frontend/authentification/login.php?msg_error="Password wrong"');
+            header('Location: ./../frontend/trips/index.phpfrontend/authentification/login.php?msg_error="Password wrong"');
             exit();
         }
     } else {
-        header('Location: http://localhost/coursphp/goPlaces/app/frontend/authentification/login.php?msg_error="User not found"');
+        header('Location: ./../frontend/trips/index.phpfrontend/authentification/login.php?msg_error="User not found"');
         exit();
     }
-
 }
 
-function logout($sessionToLogout){
+function logout($sessionToLogout)
+{
     session_start();
 
     $sessions = $_SESSION;
 
-    foreach ($sessions as $session) {
-        $sessionUser = unserialize($session);
-        if('sess_'.$sessionUser->getEmail() == $sessionToLogout){
-            unset($_SESSION['sess_']);
+    foreach ($sessions as $key => $value) {
+        $sessionUser = unserialize($value);
+        var_dump($sessionToLogout);
+        var_dump($sessionUser);
+        if ('sess_' . $sessionUser->getEmail() == $sessionToLogout) {
+            unset($_SESSION['sess_'.$sessionUser->getEmail()]);
         }
     }
+    
+    header('Location: ./../frontend/trips/index.php');
+    exit();
 }
 
-function registration(){
+function registration()
+{
     addUser();
 }

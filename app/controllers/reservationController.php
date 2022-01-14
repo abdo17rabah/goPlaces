@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 include(__DIR__ . '/../database/Database.php');
 require_once(__DIR__ . '/../../environment.php');
@@ -90,6 +89,17 @@ function getReservationById($reservationId)
     global $CONNECTIONDB;
     $requete = "SELECT * FROM reservation WHERE id = $reservationId";
     return $CONNECTIONDB->query($requete)->fetch();
+}
+
+function getReservationsByUserId($userId)
+{
+    global $CONNECTIONDB;
+    $query = $CONNECTIONDB->prepare("SELECT reservation.id, reservation.date, reservation.price, reservation.place_reserved, trip.name, user.firstname, user.lastname FROM reservation JOIN user ON reservation.user_id = user.id JOIN trip ON reservation.trip_id = trip.id WHERE user_id = :userId");
+    $res = $query->execute([
+        ':userId' => $userId
+    ]);
+
+    return $query;
 }
 
 /**

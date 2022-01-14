@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -14,8 +15,22 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
-  <title><?= isset($PageTitle) ? $PageTitle : "Go Places"?></title>
+  <title><?= isset($PageTitle) ? $PageTitle : "Go Places" ?></title>
 </head>
+
+<?php
+include_once('../../models/user/User.php');
+session_start();
+
+if (count($_SESSION) >= 1) {
+  foreach ($_SESSION as $key => $value) {
+    $nameSession = $key;
+    $session = unserialize($value);
+  }
+} else {
+  $session = null;
+}
+?>
 
 <body>
   <div class="scrollToTop"><i class="fas fa-chevron-up"></i></div>
@@ -30,17 +45,37 @@
       <div class="links">
         <ul>
           <li><a href="#" onclick="window.location='../trips/index.php';">Trips</a></li>
-          <li><a href="../reservation/reservations.php">Reservations</a></li>
-          <li><a href="#" onclick="window.location='../users/indexUsers.php';">Users</a></li>
-          <li><a href="#">My reservations</a></li>
-          <li><a href="#" onclick="window.location='/frontend/authentification/registration.php';">Registration</a></li>
           <?php
 
-          if (isset($_GET['sess'])) {
-            echo '<li><a href="frontend/users/account.php?sess=' . $_GET['sess'] . '">My profile</a></li>';
-            echo '<li><a href="controllers/authentificationController.php?action=logout&sess=' . $_GET['sess'] . '">Logout</a></li>';
+          if ($session && $session->getRole() == 'ADMIN') {
+          ?>
+            <li><a href="./../reservation/reservations.php?sess=<?php echo $nameSession ?>">All reservations</a></li>
+            <li><a href="#" onclick="window.location='../users/indexUsers.php?sess=<?php echo $nameSession ?>';">Users</a></li>
+          <?php
+          } else if ($session) {
+          ?>
+            <li><a href="./../users/usersReservations.php?sess=<?php echo $nameSession ?>">My reservations</a></li>
+          <?php
+          }
+          ?>
+          <?php
+          if (!$session) {
+          ?>
+            <li><a href="#" onclick="window.location='../authentification/registration.php';">Registration</a></li>
+          <?php
+          }
+          ?>
+
+          <?php
+
+          if ($session) {
+          ?>
+            <li><a href="../../controllers/authentificationController.php?action=logout&sess=<?php echo $_GET['sess'] ?>">Logout</a></li>
+          <?php
           } else {
-            echo '<li><a href="frontend/authentification/login.php">Login</a></li>';
+          ?>
+            <li><a href="#" onclick="window.location='../authentification/login.php';">Login</a></li>
+          <?php
           }
           ?>
         </ul>

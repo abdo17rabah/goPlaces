@@ -13,9 +13,10 @@ include_once("../../controllers/usersController.php");
         <thead>
             <tr>
                 <th scope="col">Identifiant</th>
-                <th scope="col">Nom</th>
                 <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
                 <th scope="col">Email</th>
+                <th scope="col">Role</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -36,10 +37,10 @@ include_once("../../controllers/usersController.php");
                                 }
                             ?>
                             <td>
-                                <a class="btn btn-primary" href="./formEditUser.php?&id=<?= $user[0]; ?>" role="button">
+                                <a class="btn btn-primary" href="./formEditUser.php?&id=<?= $user[0]; ?>&sess=<?php echo $nameSession ?>" role="button">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
-                                <a class="btn btn-danger" href="../../controllers/usersController.php?action=deletUserById&id=<?= $user[0]; ?>" role="button" onclick="return(confirm('Etes-vous sûr de vouloir supprimer ?'));">
+                                <a class="btn btn-danger" href="../../controllers/usersController.php?action=deletUserById&id=<?= $user[0]; ?>&sess=<?php echo $nameSession ?>" role="button" onclick="return(confirm('Etes-vous sûr de vouloir supprimer ?'));">
                                     <i class="bi bi-trash"></i>
                                 </a>
                             </td>
@@ -82,6 +83,12 @@ include_once("../../controllers/usersController.php");
                         <label for="email" class="col-sm-2 col-form-label">Email </label>
                         <div class="col-sm-10">
                             <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="password" class="col-sm-2 col-form-label">Password </label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="password" name="password" required>
                         </div>
                     </div>
                 </div>

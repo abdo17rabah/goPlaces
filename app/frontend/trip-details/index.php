@@ -10,7 +10,7 @@ require_once(__DIR__ .'/../../controllers/tripController.php');
 
 $trip = getTripById(htmlspecialchars($_GET["id"]));
 $tripCitiesNames = array_column(getTripCitiesNames(htmlspecialchars($_GET["id"])), 'name');
-
+$cities = ['Casablanca', 'Marrakech', 'Las Vegas', 'Paris', 'New York', 'Prague'];
 ?>
 <div id="trip-details">
   <section class="next-trip">
@@ -119,6 +119,17 @@ $tripCitiesNames = array_column(getTripCitiesNames(htmlspecialchars($_GET["id"])
               <?php echo "<p class='text-danger'>$errDate</p>";?>
             </div>
             <div class="form-group">
+              <label for="cities">Visited cities:</label>
+              <select name="cities" id="cities" class="selectpicker" multiple data-live-search="true">
+                <?php foreach($tripCitiesNames as $city){ ?>
+                  <option value="<?php echo $city; ?>"><?php echo strtoupper($city); ?></option>
+                <?php } ?>
+                <?php foreach(array_diff($cities, $tripCitiesNames) as $city){ ?>
+                  <option value="<?php echo $city; ?>"><?php echo strtoupper($city); ?></option>
+                <?php } ?>
+              </select>
+            </div>
+            <div class="form-group">
               <label for="price">Trip's price</label>
               <input type="text" name="price" placeholder="price" value="<?= $trip['price']; ?>" required class="form-control">
               <?php echo "<p class='text-danger'>$errPrice</p>";?>
@@ -128,6 +139,7 @@ $tripCitiesNames = array_column(getTripCitiesNames(htmlspecialchars($_GET["id"])
               <input type="text" name="availablePlaces" value="<?= $trip['place_available']; ?>" placeholder="Available places" required class="form-control">
               <?php echo "<p class='text-danger'>$errPlaces</p>";?>
             </div>
+            <input type="hidden" name="hidden_cities" id="hidden_cities" />
             <button name="submit" type="submit" class="btn btn-primary btn-block rounded-pill shadow-sm my-3"> Confirm </button>
           </form>
         </div>
@@ -135,6 +147,18 @@ $tripCitiesNames = array_column(getTripCitiesNames(htmlspecialchars($_GET["id"])
     </div>
   </div>
 </div>
+
+<script>
+  <?php
+  $js_array = json_encode($tripCitiesNames);
+  echo "cities = ". $js_array . ";\n";
+  ?>
+  $('.selectpicker').selectpicker('val', cities);
+  $('#hidden_cities').val($('#cities').val());
+  $('#cities').change(function(){
+    $('#hidden_cities').val($('#cities').val());
+  });
+</script>
 <?php
 include_once('../../frontend/constant/footer.php');
 ?>

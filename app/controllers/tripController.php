@@ -19,17 +19,22 @@ function createNewTrip() {
   $requete->bindParam(':price', $price);
   $requete->bindParam(':availablePlaces', $availablePlaces);
   if ($requete->execute()){
+    $message = 'Success ! Trip added!';
     header('location:../frontend/trips/index.php');
   }else {
-    $_SESSION['message'] = 'Error, please try later!';
+    $message = 'Error, please try later!';
   }
 }
 
 function updateTrip() {
   global $CONNECTIONDB;
 
-  if (!$_POST['name']) {
+  if (empty($_POST['name'])) {
     $errName = 'Please enter trip\'s name';
+  }
+
+  if (empty($_POST['hidden_cities'])) {
+    $errCities = 'Please choose at least one city';
   }
 
   if (!$_POST['date']) {
@@ -44,18 +49,18 @@ function updateTrip() {
     $errPlaces = 'Please enter a valid number of places';
   }
 
-  if (empty($errName) && empty($errDate) && empty($errPrice) && empty($errPlaces)) {
+  if (empty($errName) && empty($errDate) && empty($errPrice) && empty($errPlaces) && empty($errCities)) {
     $sql = "UPDATE trip SET name=?, date=?, price=?, place_available=? WHERE id=?";
     $stmt= $CONNECTIONDB->prepare($sql);
     $res = $stmt->execute([$_POST['name'], $_POST['date'], $_POST['price'], $_POST['availablePlaces'], $_POST['id']]);
 
     if ($res){
-      $_SESSION['message'] = 'Success ! Trip updated';
+      $message = 'Success ! Trip updated';
     } else {
-      $_SESSION['message'] = 'Error, please try later!';
+      $message = 'Error, please try later!';
     }
   } else {
-    $_SESSION['message'] = 'Error, please try later!';
+    $message = 'Error, please try later!';
   }
   header('location:../frontend/trips/index.php');
 }
@@ -66,9 +71,9 @@ function deleteTrip($id) {
   $res->bindParam(':id', $id);
 
   if ($res->execute()){
-    $_SESSION['message'] = 'Success ! Trip deleted';
+    $message = 'Success ! Trip deleted';
   } else {
-    $_SESSION['message'] = 'Error, please try later!';
+    $message = 'Error, please try later!';
   }
   header('location:../frontend/trips/index.php');
 }

@@ -100,9 +100,9 @@ $cities = ['Casablanca', 'Marrakech', 'Las Vegas', 'Paris', 'New York', 'Prague'
       <div class="tab-content">
         <div id="nav-tab-card" class="tab-pane fade show active">
           <?php
-          if($_SESSION['message']) {
+          if(isset($_GET['message'])){
           ?>
-            <p class="alert alert-success"><?=$_SESSION['message']?></p>
+            <p class="alert alert-success"><?=$_GET['message']?></p>
             <?php
           }
           ?>

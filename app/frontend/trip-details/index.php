@@ -7,10 +7,11 @@ $PageTitle = "Trip details";
 
 include_once('../../frontend/constant/header.php');
 require_once(__DIR__ .'/../../controllers/tripController.php');
+require_once(__DIR__ .'/../../controllers/cityController.php');
 
 $trip = getTripById(htmlspecialchars($_GET["id"]));
 $tripCitiesNames = array_column(getTripCitiesNames(htmlspecialchars($_GET["id"])), 'name');
-$cities = ['Casablanca', 'Marrakech', 'Las Vegas', 'Paris', 'New York', 'Prague'];
+$cities = array_column(getAllCitiesNames(), 'name');
 ?>
 <div id="trip-details">
   <section class="next-trip">
@@ -121,10 +122,7 @@ $cities = ['Casablanca', 'Marrakech', 'Las Vegas', 'Paris', 'New York', 'Prague'
             <div class="form-group">
               <label for="cities">Visited cities:</label>
               <select name="cities" id="cities" class="selectpicker" multiple data-live-search="true">
-                <?php foreach($tripCitiesNames as $city){ ?>
-                  <option value="<?php echo $city; ?>"><?php echo strtoupper($city); ?></option>
-                <?php } ?>
-                <?php foreach(array_diff($cities, $tripCitiesNames) as $city){ ?>
+                <?php foreach($cities as $city){ ?>
                   <option value="<?php echo $city; ?>"><?php echo strtoupper($city); ?></option>
                 <?php } ?>
               </select>
@@ -154,7 +152,6 @@ $cities = ['Casablanca', 'Marrakech', 'Las Vegas', 'Paris', 'New York', 'Prague'
   echo "cities = ". $js_array . ";\n";
   ?>
   $('.selectpicker').selectpicker('val', cities);
-  $('#hidden_cities').val($('#cities').val());
   $('#cities').change(function(){
     $('#hidden_cities').val($('#cities').val());
   });

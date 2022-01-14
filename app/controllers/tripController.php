@@ -37,7 +37,9 @@ function createNewTrip() {
     // attach cities to trip
     $cities = explode(",", $_POST['hidden_cities']);
     //attach attach cities
-    attachCitiesToTrip($CONNECTIONDB, $cities);
+    $stm = "SELECT id FROM trip ORDER BY id DESC LIMIT 1;";
+    $res = $CONNECTIONDB->query($stm)->fetch();
+    attachCitiesToTrip($CONNECTIONDB, $res['id'], $cities);
     $message = 'Success ! Trip added!';
   }else {
     $message = 'Error, please try later!';
@@ -89,7 +91,7 @@ function updateTrip() {
       }
 
       //attach attach cities
-      attachCitiesToTrip($CONNECTIONDB, $cities);
+      attachCitiesToTrip($CONNECTIONDB, $_POST['id'], $cities);
     } else {
       $message = 'Error, please try later!';
     }
@@ -131,7 +133,7 @@ function getTripCitiesNames($tripId) {
   return $CONNECTIONDB->query($requete)->fetchAll();
 }
 
-function attachCitiesToTrip($CONNECTIONDB, $cities) {
+function attachCitiesToTrip($CONNECTIONDB, $tripId, $cities) {
   $req = "SELECT city.id FROM city WHERE name IN ('".implode("','",$cities)."')";
   $queryRes = $CONNECTIONDB->query($req)->fetchAll();
   $queryRes = array_column($queryRes, 'id');
@@ -139,7 +141,7 @@ function attachCitiesToTrip($CONNECTIONDB, $cities) {
   // insert rows in pivot table
   foreach ($queryRes as $id) {
     $req = $CONNECTIONDB->prepare("INSERT INTO `trip_city` (trip_id, city_id) VALUES (:trip_id ,:city_id)");
-    $req->bindParam(':trip_id', $_POST["id"]);
+    $req->bindParam(':trip_id', $tripId);
     $req->bindParam(':city_id', $id);
     if (!$req->execute()){
       $message = 'Error, please try later!';

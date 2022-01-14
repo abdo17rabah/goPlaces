@@ -38,7 +38,7 @@ sr.reveal(
   }
 );
 
-function switchVisible() {
-  document.getElementById('trip-details').style.display = 'none';
-  document.getElementById('updateFormDiv').style.display = 'block';
+function switchVisible(id1, id2) {
+  document.getElementById(id1).style.display = 'none';
+  document.getElementById(id2).style.display = 'block';
 }

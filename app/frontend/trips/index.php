@@ -1,12 +1,16 @@
 <?php
+error_reporting(E_ERROR | E_PARSE);
 
 $PageTitle="Our trips";
 
 include_once('../../frontend/constant/header.php');
 require_once(__DIR__ .'/../../controllers/tripController.php');
+require_once(__DIR__ .'/../../controllers/cityController.php');
 
 $trips = getAllTrips();
+$cities = array_column(getAllCitiesNames(), 'name');
 ?>
+<div id="div1">
   <section class="destination">
     <p class="subtitle">Discover our</p>
     <h2 class="title">Destinations</h2>
@@ -38,7 +42,7 @@ $trips = getAllTrips();
             </div>
           </div>
         </div>
-       <?php
+        <?php
       }
     } else {
       ?>
@@ -47,6 +51,65 @@ $trips = getAllTrips();
     }
     ?>
   </section>
+  <button name="addButton" type="button" class="btn btn-primary btn-block rounded-pill shadow-sm my-3" onclick="switchVisible('div1', 'addFormDiv');"> Add new trip </button>
+</div>
+
+<div class="container py-5" id="addFormDiv" style="display: none;">
+  <div class="col-lg-7 mx-auto">
+    <div class="bg-white rounded-lg shadow-sm p-5">
+      <div class="tab-content">
+        <div id="nav-tab-card" class="tab-pane fade show active">
+          <?php
+          if(isset($_GET['message'])){
+            ?>
+            <p class="alert alert-success"><?=$_GET['message']?></p>
+            <?php
+          }
+          ?>
+          <form role="form" method="post" action="../../controllers/tripController.php?action=create">
+            <input type="hidden" id="id" name="id">
+            <div class="form-group">
+              <label for="name">Trip's name</label>
+              <input type="text" name="name" placeholder="Name"  required class="form-control">
+              <?php echo "<p class='text-danger'>$errName</p>";?>
+            </div>
+            <div class="form-group">
+              <label for="date">Trip's date</label>
+              <input type="datetime-local" name="date" min="<?php echo Date('Y-m-d\TH:i',time()) ?>" placeholder="Date" required class="form-control">
+              <?php echo "<p class='text-danger'>$errDate</p>";?>
+            </div>
+            <div class="form-group">
+              <label for="cities">Visited cities:</label>
+              <select name="cities" id="allCities" class="selectpicker" multiple data-live-search="true">
+                <?php foreach($cities as $city){ ?>
+                  <option value="<?php echo $city; ?>"><?php echo strtoupper($city); ?></option>
+                <?php } ?>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="price">Trip's price</label>
+              <input type="text" name="price" placeholder="price" required class="form-control">
+              <?php echo "<p class='text-danger'>$errPrice</p>";?>
+            </div>
+            <div class="form-group">
+              <label for="availablePlaces">Trip's available places</label>
+              <input type="text" name="availablePlaces" placeholder="Available places" required class="form-control">
+              <?php echo "<p class='text-danger'>$errPlaces</p>";?>
+            </div>
+            <input type="hidden" name="hidden_cities" id="hidden_cities2" />
+            <button name="submit" type="submit" class="btn btn-primary btn-block rounded-pill shadow-sm my-3"> Add </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('#allCities').change(function(){
+    $('#hidden_cities2').val($('#allCities').val());
+  });
+</script>
 <?php
 include_once('../../frontend/constant/footer.php');
 ?>

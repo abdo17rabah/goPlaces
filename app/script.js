@@ -42,7 +42,3 @@ function switchVisible() {
   document.getElementById('trip-details').style.display = 'none';
   document.getElementById('updateFormDiv').style.display = 'block';
 }
-
-$(function () {
-  $('#datetimepicker1').datetimepicker();
-});

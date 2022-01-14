@@ -19,17 +19,22 @@ function createNewTrip() {
   $requete->bindParam(':price', $price);
   $requete->bindParam(':availablePlaces', $availablePlaces);
   if ($requete->execute()){
-    header('location:../frontend/trips/index.php');
+    $message = 'Success ! Trip added!';
   }else {
-    $_SESSION['message'] = 'Error, please try later!';
+    $message = 'Error, please try later!';
   }
+  header('location:../frontend/trips/index.php?message='.urlencode($message));
 }
 
 function updateTrip() {
   global $CONNECTIONDB;
 
-  if (!$_POST['name']) {
+  if (empty($_POST['name'])) {
     $errName = 'Please enter trip\'s name';
+  }
+
+  if (empty($_POST['hidden_cities'])) {
+    $errCities = 'Please choose at least one city';
   }
 
   if (!$_POST['date']) {
@@ -44,20 +49,59 @@ function updateTrip() {
     $errPlaces = 'Please enter a valid number of places';
   }
 
-  if (empty($errName) && empty($errDate) && empty($errPrice) && empty($errPlaces)) {
+  if (empty($errName) && empty($errDate) && empty($errPrice) && empty($errPlaces) && empty($errCities)) {
+    //update trip cities
+    $cities = explode(",", $_POST['hidden_cities']);
+    $tripCitiesNames = array_column(getTripCitiesNames($_POST["id"]), 'name');
+    $diff = array_diff($cities,$tripCitiesNames);
+
+    // delete form cities
+    $req = $CONNECTIONDB->prepare("DELETE FROM `trip_city` TC WHERE TC.trip_id = :id");
+    $req->bindParam(':id', $_POST['id']);
+    if (!$req->execute()){
+      $message = 'Error, please try later!';
+      header('location:../frontend/trips/index.php?message='.urlencode($message));
+    }
+
+    // create and attach cities
+    foreach($diff as $city){
+      $req = $CONNECTIONDB->prepare("INSERT INTO city (name) VALUES (:cityName)");
+      $req->bindParam(':cityName', $city);
+      if (!$req->execute()){
+        $message = 'Error, please try later!';
+        header('location:../frontend/trips/index.php?message='.urlencode($message));
+      }
+    }
+
+    //get cities ids
+    $req = "SELECT city.id FROM city WHERE name IN ('".implode("','",$cities)."')";
+    $queryRes = $CONNECTIONDB->query($req)->fetchAll();
+    $queryRes = array_column($queryRes, 'id');
+
+    // insert rows in pivot table
+    foreach ($queryRes as $id) {
+      $req = $CONNECTIONDB->prepare("INSERT INTO `trip_city` (trip_id, city_id) VALUES (:trip_id ,:city_id)");
+      $req->bindParam(':trip_id', $_POST["id"]);
+      $req->bindParam(':city_id', $id);
+      if (!$req->execute()){
+        $message = 'Error, please try later!';
+        header('location:../frontend/trips/index.php?message='.urlencode($message));
+      }
+    }
+
     $sql = "UPDATE trip SET name=?, date=?, price=?, place_available=? WHERE id=?";
     $stmt= $CONNECTIONDB->prepare($sql);
     $res = $stmt->execute([$_POST['name'], $_POST['date'], $_POST['price'], $_POST['availablePlaces'], $_POST['id']]);
 
     if ($res){
-      $_SESSION['message'] = 'Success ! Trip updated';
+      $message = 'Success ! Trip updated';
     } else {
-      $_SESSION['message'] = 'Error, please try later!';
+      $message = 'Error, please try later!';
     }
   } else {
-    $_SESSION['message'] = 'Error, please try later!';
+    $message = 'Error, please try later!';
   }
-  header('location:../frontend/trips/index.php');
+  header('location:../frontend/trips/index.php?message='.urlencode($message));
 }
 
 function deleteTrip($id) {
@@ -66,11 +110,11 @@ function deleteTrip($id) {
   $res->bindParam(':id', $id);
 
   if ($res->execute()){
-    $_SESSION['message'] = 'Success ! Trip deleted';
+    $message = 'Success ! Trip deleted';
   } else {
-    $_SESSION['message'] = 'Error, please try later!';
+    $message = 'Error, please try later!';
   }
-  header('location:../frontend/trips/index.php');
+  header('location:../frontend/trips/index.php?message='.urlencode($message));
 }
 
 function getAllTrips() {

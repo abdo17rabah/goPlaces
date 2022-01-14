@@ -29,12 +29,12 @@ function createNewReservation()
     }
 }
 
-function updateReservation()
+function updateReservation($id)
 {
     global $CONNECTIONDB;
 
-    if (!$_POST['date']) {
-        $errDate = 'Please enter a valid date';
+    if (!$id || !is_numeric($id)) {
+        $errPrice = 'id invalid';
     }
 
     if (!$_POST['price'] || !is_numeric($_POST['price'])) {
@@ -45,10 +45,10 @@ function updateReservation()
         $errPlaces = 'Please enter a valid number of places';
     }
 
-    if (empty($errName) && empty($errDate) && empty($errPrice) && empty($errPlaces)) {
-        $sql = "UPDATE reservation SET date=?, price=?, place_reserved=? WHERE id=?";
+    if (empty($errPrice) && empty($errPlaces)) {
+        $sql = "UPDATE reservation SET price=?, place_reserved=? WHERE id=?";
         $stmt = $CONNECTIONDB->prepare($sql);
-        $res = $stmt->execute([$_POST['date'], $_POST['price'], $_POST['placeReserved'], $_POST['id']]);
+        $res = $stmt->execute([$_POST['price'], $_POST['placeReserved'], $id]);
 
         if ($res) {
             $_SESSION['message'] = 'Success ! reservation updated';
@@ -78,9 +78,11 @@ function deleteReservation($id)
 function getAllReservations()
 {
     global $CONNECTIONDB;
-    $requete = "SELECT * FROM reservation";
+
+    $requete = "SELECT reservation.id, reservation.date, reservation.price, reservation.place_reserved, user.firstname, user.lastname, trip.name FROM reservation JOIN user ON reservation.user_id = user.id JOIN trip ON reservation.trip_id = trip.id";
+
     $result = $CONNECTIONDB->query($requete);
-    return $result->fetchAll();
+    return $result;
 }
 
 function getReservationById($reservationId)
@@ -116,7 +118,7 @@ if (isset($_GET['action'])) {
             deleteReservation($_GET['id']);
             break;
         case "update":
-            updateReservation();
+            updateReservation($_GET['id']);
             break;
     }
 }

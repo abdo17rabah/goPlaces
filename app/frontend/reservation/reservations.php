@@ -16,8 +16,9 @@ include_once("../../controllers/reservationController.php");
                 <th scope="col">Date</th>
                 <th scope="col">Price</th>
                 <th scope="col">Places réservés</th>
-                <th scope="col">Circuit id</th>
-                <th scope="col">Utilisateur id</th>
+                <th scope="col">Circuit</th>
+                <th scope="col">Utilisateur Prénom</th>
+                <th scope="col">Utilisateur Nom</th>
             </tr>
         </thead>
         <tbody>
@@ -26,8 +27,7 @@ include_once("../../controllers/reservationController.php");
             if (!$reservations) {
                 echo "<p>no reservation</p>";
             } else {
-                // while ($reservation = $reservations->fetch(PDO::FETCH_NUM)) {
-                foreach ($reservations as $reservation) {
+                while ($reservation = $reservations->fetch(PDO::FETCH_NUM)) {
             ?>
                     <tr>
                         <?php
@@ -38,10 +38,10 @@ include_once("../../controllers/reservationController.php");
                         }
                         ?>
                         <td>
-                            <a class="btn btn-primary" href="./formEditUser.php?&id=<?= $reservation[0]; ?>" role="button">
+                            <a class="btn btn-primary" href="./formEditReservation.php?&id=<?= $reservation[0]; ?>" role="button">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
-                            <a class="btn btn-danger" href="../../controllers/usersController.php?action=deletUserById&id=<?= $reservation[0]; ?>" role="button" onclick="return(confirm('Etes-vous sûr de vouloir supprimer ?'));">
+                            <a class="btn btn-danger" href="../../controllers/reservationController.php?action=delete&id=<?= $reservation[0]; ?>" role="button" onclick="return(confirm('Etes-vous sûr de vouloir supprimer ?'));">
                                 <i class="bi bi-trash"></i>
                             </a>
                         </td>

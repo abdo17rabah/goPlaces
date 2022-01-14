@@ -1,11 +1,11 @@
 <?php
-    
-    include_once(__DIR__ .'/../database/Database.php');
+
+    include(__DIR__ .'/../database/Database.php');
+    require_once (__DIR__ .'/../../environment.php');
     include_once(__DIR__ .'/../classes/User.php');
-    
+
     function getAllUsers() {
-        // $connexionDb = connectToDb();
-        $db = new Database('localhost', 'goPlaces', 'ipssi', 'ipssi');
+        $db = new Database($_ENV["SERVER"], $_ENV["DB"], $_ENV["USER"], $_ENV["PASSWORD"]);
         $connexionDb = $db->getConnection();
         $requete="SELECT * FROM user";
         $result = $connexionDb->query($requete);
@@ -50,10 +50,10 @@
     function deleteUserById($idUser) {
         $db = new Database('localhost', 'goPlaces', 'ipssi', 'ipssi');
         $connexionDb = $db->getConnection();
-        
+
         $requete = $connexionDb->prepare("DELETE FROM user WHERE id = :id");
         $requete->bindParam(':id', $idUser);
-        
+
         if ($requete->execute()){
             header('location:../frontend/users/indexUsers.php');
         }else {
@@ -70,10 +70,10 @@
     function findUserByEmail($email){
         $db = new Database('localhost', 'goPlaces', 'ipssi', 'ipssi');
         $connexionDb = $db->getConnection();
-        
+
         $requete = $connexionDb->prepare("SELECT * FROM user WHERE email = :email");
         $requete->bindParam(':email', $email);
-        
+
         if ($requete->execute()){
             $user = $requete->fetch();
             return new User($user['firstname'], $user['lastname'], $user['email'], $user['password'], $user['role']);

@@ -2,9 +2,6 @@
 
 $PageTitle="Home";
 
-function customPageHeader(){?>
-<?php }
-
 include_once('./frontend/constant/header.php');
 
 ?>

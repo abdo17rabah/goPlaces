@@ -20,7 +20,7 @@
         $password = $_POST['password'];
         $role = 'USER';
 
-        $db = new Database('localhost', 'goPlaces', 'ipssi', 'ipssi');
+        $db = new Database($_ENV["SERVER"], $_ENV["DB"], $_ENV["USER"], $_ENV["PASSWORD"]);
         $connexionDb = $db->getConnection();
 
         $requete = $connexionDb->prepare("INSERT INTO user (lastname, firstname, email, password, role) VALUES (:lastname, :firstname, :email, :password, :role)");
@@ -38,7 +38,7 @@
 
     // get user by id
     function getUserById($idUser) {
-        $db = new Database('localhost', 'goPlaces', 'ipssi', 'ipssi');
+      $db = new Database($_ENV["SERVER"], $_ENV["DB"], $_ENV["USER"], $_ENV["PASSWORD"]);
         $connexionDb = $db->getConnection();
 
         $requete = "SELECT * FROM user WHERE id = $idUser";
@@ -48,7 +48,7 @@
 
     // delete user by id
     function deleteUserById($idUser, $nameSession) {
-        $db = new Database('localhost', 'goPlaces', 'ipssi', 'ipssi');
+      $db = new Database($_ENV["SERVER"], $_ENV["DB"], $_ENV["USER"], $_ENV["PASSWORD"]);
         $connexionDb = $db->getConnection();
 
         $requete = $connexionDb->prepare("DELETE FROM user WHERE id = :id");
@@ -69,7 +69,7 @@
         $email = htmlspecialchars($_POST['email']);
         $password = htmlspecialchars($_POST['password']);
 
-        $db = new Database('localhost', 'goPlaces', 'ipssi', 'ipssi');
+      $db = new Database($_ENV["SERVER"], $_ENV["DB"], $_ENV["USER"], $_ENV["PASSWORD"]);
         $connexionDb = $db->getConnection();
 
         $query = $connexionDb->prepare("UPDATE user SET firstname=:firstname, lastname=:lastname, email=:email, password=:password WHERE id = :id");
@@ -90,7 +90,7 @@
 
     // find an user by email. Login function
     function findUserByEmail($email){
-        $db = new Database('localhost', 'goPlaces', 'ipssi', 'ipssi');
+      $db = new Database($_ENV["SERVER"], $_ENV["DB"], $_ENV["USER"], $_ENV["PASSWORD"]);
         $connexionDb = $db->getConnection();
 
         $requete = $connexionDb->prepare("SELECT * FROM user WHERE email = :email");

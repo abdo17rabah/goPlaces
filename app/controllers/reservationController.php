@@ -7,7 +7,11 @@ $CONNECTIONDB = $db->getConnection();
 
 function createNewReservation()
 {
-    global $CONNECTIONDB;
+  global $CONNECTIONDB;
+  if (!$_POST['placeReserved'] || !is_int((int) is_numeric($_POST['placeReserved'])) || (int)$_POST['placeReserved'] > $_POST['place_available']) {
+    $errPlaces = 'Please enter a valid number of places';
+  }
+  if (empty($errPlaces)) {
     $date = $_POST['date'];
     $price = $_POST['price'];
     $placeReserved = $_POST['placeReserved'];
@@ -22,10 +26,17 @@ function createNewReservation()
     $requete->bindParam(':userId', $userId);
 
     if ($requete->execute()) {
-        header('location:../frontend/reservation/reservations.php');
+      header('location:../frontend/reservation/reservations.php');
     } else {
-        $_SESSION['message'] = 'Error, please try later!';
+      $message = urlencode('Error, please try later!');
+      header("location : ../frontend/trips/index.php?message=$message");
     }
+  } else {
+    $message = urlencode('Error, please try later!');
+  }
+  $id = $_POST["id"];
+  header("location : ../frontend/trip-details/index.php?id=$id&message=$message");
+
 }
 
 function updateReservation($id)
@@ -102,9 +113,6 @@ function getReservationsByUserId($userId)
     return $query;
 }
 
-/**
- * todo
- */
 function getReservationUserFullName($userId)
 {
     global $CONNECTIONDB;

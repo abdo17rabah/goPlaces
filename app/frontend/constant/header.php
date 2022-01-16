@@ -19,7 +19,7 @@
 </head>
 
 <?php
-include_once('../../models/user/User.php');
+include_once(__DIR__ .'/../../models/user/User.php');
 session_start();
 
 if (count($_SESSION) >= 1) {
@@ -44,7 +44,7 @@ if (count($_SESSION) >= 1) {
       </div>
       <div class="links">
         <ul>
-          <li><a href="#" onclick="window.location='../trips/index.php';">Trips</a></li>
+          <li><a href="#" onclick="window.location='frontend/trips/index.php';">Trips</a></li>
           <?php
 
           if ($session && $session->getRole() == 'ADMIN') {

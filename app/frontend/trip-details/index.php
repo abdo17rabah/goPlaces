@@ -1,7 +1,13 @@
 <?php
 session_start();
-// $user = $_SESSION['user'];
-error_reporting(E_ERROR | E_PARSE);
+if (count($_SESSION) >= 1) {
+  foreach ($_SESSION as $key => $value) {
+    $nameSession = $key;
+    $session = unserialize($value);
+  }
+} else {
+  $session = null;
+}
 
 $PageTitle = "Trip details";
 
@@ -78,19 +84,30 @@ $cities = array_column(getAllCitiesNames(), 'name');
           <span><?= $trip['place_available']; ?> places left</span>
         </div>
       </div>
-      <div class="icons">
-        <div class="icon">
-          <i class="fas fa-shopping-basket"></i>
+      <?php
+      if ($session) {
+      ?>
+        <div class="icons">
+          <div class="icon" onclick="window.location='../reservation/fromAddReservation.php?id=<?= $trip['id']; ?>;'">
+            <i class="fas fa-shopping-basket"></i>
+          </div>
+          <?php
+
+          if ($session->getRole() == 'ADMIN') {
+          ?>
+          <div class="icon" onclick="switchVisible('trip-details', 'updateFormDiv');">
+            <i class="fas fa-edit"></i>
+          </div>
+          <div class="icon" onclick="window.location='/controllers/tripController?action=delete&id='+<?= $trip['id']; ?>;">
+            <i class="fas fa-trash-alt"></i>
+          </div>
+          <?php
+          }
+          ?>
         </div>
-        <!--      @todo add condition to check if user is admin-->
-        <div class="icon" onclick="switchVisible('trip-details', 'updateFormDiv');">
-          <i class="fas fa-edit"></i>
-        </div>
-        <!--      @todo add condition to check if user is admin-->
-        <div class="icon" onclick="window.location='/controllers/tripController?action=delete&id='+<?= $trip['id']; ?>;">
-          <i class="fas fa-trash-alt"></i>
-        </div>
-      </div>
+        <?php
+      }
+      ?>
     </div>
   </section>
 </div>

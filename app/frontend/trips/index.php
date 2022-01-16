@@ -10,8 +10,22 @@ require_once(__DIR__ . '/../../controllers/cityController.php');
 $trips = getAllTrips();
 $cities = array_column(getAllCitiesNames(), 'name');
 ?>
-<div id="div1">
-  <section class="destination">
+  <section class="starter">
+    <div class="content">
+      <p class="subTitle">Best Trips around the world</p>
+      <h1 class="title">
+        Travel, <span>Discover</span> and enjoy a new and full life
+      </h1>
+      <div class="description">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam
+        molestias, vel aliquid at praesentium quo.
+      </div>
+    </div>
+    <div class="image">
+      <img src="assets/traveller1.png" alt="" />
+    </div>
+  </section>
+  <section class="destination" id="div1">
     <p class="subtitle">Discover our</p>
     <h2 class="title">Destinations</h2>
     <?php
@@ -52,13 +66,12 @@ $cities = array_column(getAllCitiesNames(), 'name');
     ?>
   </section>
   <?php
-  if ($session && $session->getRole() == 'ADMIN') {
+  if ($session->getRole() == 'ADMIN') {
   ?>
     <button name="addButton" type="button" class="btn btn-primary btn-block rounded-pill shadow-sm my-3" onclick="switchVisible('div1', 'addFormDiv');"> Add new trip </button>
   <?php
   }
   ?>
-</div>
 
 <div class="container py-5" id="addFormDiv" style="display: none;">
   <div class="col-lg-7 mx-auto">

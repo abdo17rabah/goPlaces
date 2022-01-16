@@ -68,12 +68,12 @@ function logout($sessionToLogout)
             unset($_SESSION['sess_'.$sessionUser->getEmail()]);
         }
     }
-    
+
     header('Location: ./../frontend/trips/index.php');
     exit();
 }
 
 function registration()
 {
-    addUser();
+    addUser($_GET['sess']);
 }
